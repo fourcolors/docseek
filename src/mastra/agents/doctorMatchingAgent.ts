@@ -7,6 +7,7 @@ import { storage } from "../storage";
 const memory = new Memory({
   storage,
   options: {
+    semanticRecall: false,
     lastMessages: 50,
     threads: {
       generateTitle: true,
