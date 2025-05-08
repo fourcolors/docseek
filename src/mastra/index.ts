@@ -2,7 +2,6 @@ import { Mastra, Agent } from "@mastra/core";
 import { doctorMatchingAgent } from "./agents/doctorMatchingAgent";
 import { diagnosticAgent } from "./agents/diagnosticAgent"; // Exports diagnosticAgent
 import { storage } from "./storage";
-import { DoctorService } from "./services/doctorService";
 
 /**
  * @file index.ts
@@ -37,6 +36,3 @@ export const mastra = new Mastra({
   },
   storage, // Shared storage for all agents
 }) as unknown as DocseekMastra;
-
-// Initialize the doctor service with the doctor matching agent
-export const doctorService = new DoctorService(doctorMatchingAgent);
