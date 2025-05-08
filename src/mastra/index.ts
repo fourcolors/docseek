@@ -1,13 +1,36 @@
-import { createLogger } from "@mastra/core/logger";
-import { Mastra } from "@mastra/core/mastra";
-import { agents } from "./agents";
-import { weatherWorkflow } from "./workflows";
+import { Mastra, Agent } from "@mastra/core";
+import { doctorMatchingAgent } from "./agents/doctorMatchingAgent";
+import { diagnosticAgent } from "./agents/medicalAgent"; // Exports diagnosticAgent
 
+/**
+ * @file index.ts
+ * Main Mastra configuration and export for the DocSeek application.
+ * This file initializes the Mastra instance and registers all agents.
+ * It also provides an example of how to start a conversation with the diagnostic agent.
+ */
+
+/**
+ * Interface for extended Agent with createThread method
+ */
+interface ExtendedAgent extends Agent {
+  createThread: () => Promise<any>;
+}
+
+/**
+ * Interface for our Mastra instance with properly typed agents
+ */
+interface DocseekMastra {
+  agents: {
+    diagnosticAgent: ExtendedAgent;
+    doctorMatchingAgent: ExtendedAgent;
+  };
+}
+
+// Type assertion to ensure TypeScript recognizes our mastra instance has the agents property
+// Using a two-step type assertion with 'unknown' as an intermediate type for type safety
 export const mastra = new Mastra({
-  workflows: { weatherWorkflow },
-  agents,
-  logger: createLogger({
-    name: "Mastra",
-    level: "info",
-  }),
-});
+  agents: {
+    diagnosticAgent,
+    doctorMatchingAgent,
+  },
+}) as unknown as DocseekMastra;

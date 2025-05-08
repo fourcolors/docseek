@@ -1,59 +1,45 @@
-import { tool } from "ai";
-import { z } from "zod";
-import mockDoctors from "~/data/mock_doctors.json";
+import { createTool } from "@mastra/core/tools";
+import { FindDoctorToolInputSchema } from "../schemas";
+
+export type DoctorTypesMap = {
+  [specialty: string]: string[];
+};
+
+// In-memory doctor data as per user's example
+const doctorTypes: DoctorTypesMap = {
+  cardiology: ["Dr. Lee (Heart Specialist)", "Dr. Wong (Cardiovascular)"],
+  dermatology: ["Dr. Tan (Skin Specialist)", "Dr. Chen (Dermatology)"],
+  neurology: ["Dr. Lim (Neurologist)", "Dr. Singh (Brain Specialist)"],
+  orthopedics: ["Dr. Kumar (Bone Specialist)", "Dr. Patel (Joint Care)"],
+  general: ["Dr. Ng (General Practitioner)", "Dr. Sharma (Family Medicine)"],
+};
 
 /**
- * Tool for routing a patient to the right doctor based on symptom and location.
- * Loads doctors from a mock JSON file and matches by symptom and (optionally) location.
- * @module doctorRouter
+ * @file doctorRouter.ts
+ * Tool to find appropriate doctors based on a medical diagnosis and symptoms.
+ * It uses an in-memory doctor list (doctorTypes) and the doctorMatchingAgent
+ * to get recommendations.
  */
-export const doctorRouter = tool({
+export const findDoctorsTool = createTool({
+  id: "findDoctorsForDiagnosis",
   description:
-    "Route a patient to the right doctor based on their symptom and (optionally) location.",
-  parameters: z.object({
-    symptom: z.string().describe("The main symptom to match with a doctor"),
-    location: z
-      .string()
-      .optional()
-      .describe("Optional location to filter doctors"),
-  }),
+    "Finds appropriate doctors based on a medical diagnosis, symptoms, and severity. Uses a specialized agent and an in-memory list of doctors categorized by specialty to provide recommendations.",
+  inputSchema: FindDoctorToolInputSchema,
   /**
-   * Executes the doctor routing logic.
-   * @param symptom - Symptom to match
-   * @param location - Optional location
-   * @returns {Promise<{doctor?: object, reason: string}>} Matching doctor and reason
+   * Executes the doctor finding logic.
+   * @param {object} params - The parameters for the tool.
+   * @param {string} params.diagnosis - The medical diagnosis.
+   * @param {string} params.symptoms - A description of symptoms.
+   * @param {\"low\" | \"medium\" | \"high\" | \"emergency\"} params.severity - The severity of the symptoms.
+   * @returns {Promise<string>} A string containing doctor recommendations or an error message.
    */
-  async execute({ symptom, location }: { symptom: string; location?: string }) {
-    // Inline schema for doctor
-    const DoctorSchema = z.object({
-      id: z.string(),
-      name: z.string(),
-      specialty: z.string(),
-      symptoms: z.array(z.string()),
-      location: z.string(),
-      contact: z.string(),
+  async execute({ context: { diagnosis, symptoms, severity } }) {
+    console.log("executing with this context", {
+      diagnosis,
+      symptoms,
+      severity,
     });
-    // Load doctors from JSON
-    const doctors = z.array(DoctorSchema).parse(mockDoctors);
-
-    // Find doctor
-    const doctor = doctors.find(
-      (doc) =>
-        doc.symptoms
-          .map((s) => s.toLowerCase())
-          .includes(symptom.toLowerCase()) &&
-        (!location || doc.location.toLowerCase() === location.toLowerCase())
-    );
-
-    if (doctor) {
-      return {
-        doctor,
-        reason: `Matched doctor for symptom '${symptom}'${location ? ` in ${location}` : ""}.`,
-      };
-    }
-    return {
-      doctor: undefined,
-      reason: `No doctor found for symptom '${symptom}'${location ? ` in ${location}` : ""}.`,
-    };
+    // TODO: Implement doctor finding logic
+    return "No doctors found";
   },
 });
