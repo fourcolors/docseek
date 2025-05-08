@@ -1,6 +1,6 @@
 import { createTool } from "@mastra/core/tools";
 import { FindDoctorToolInputSchema } from "../schemas";
-import { matchDoctorsForDiagnosis } from "../services/doctorService";
+import { matchDoctorsForDiagnosis } from "../provider/doctorService";
 
 // Get reference to the Mastra instance to avoid circular imports
 let mastraInstance: any;
@@ -43,25 +43,28 @@ export const findDoctorsTool = createTool({
     const agentMessageHandler = async (message: string): Promise<string> => {
       try {
         // Create a thread for communication with the doctorMatchingAgent
-        const thread = await mastraInstance.agents.doctorMatchingAgent.createThread();
-        
+        const thread =
+          await mastraInstance.agents.doctorMatchingAgent.createThread();
+
         // Send the message to the agent
         const response = await thread.sendUserMessage(message);
-        
+
         // Return the response content
         return response.content;
       } catch (error: any) {
         console.error("Error communicating with doctor matching agent:", error);
-        throw new Error(`Failed to communicate with doctor matching agent: ${error?.message}`);
+        throw new Error(
+          `Failed to communicate with doctor matching agent: ${error?.message}`,
+        );
       }
     };
 
     // Use the doctor matching function to find appropriate doctors
     return await matchDoctorsForDiagnosis(
-      diagnosis, 
-      symptoms, 
-      severity, 
-      agentMessageHandler
+      diagnosis,
+      symptoms,
+      severity,
+      agentMessageHandler,
     );
   },
 });
