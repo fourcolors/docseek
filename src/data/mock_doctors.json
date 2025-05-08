@@ -1,0 +1,34 @@
+[
+  {
+    "id": "doc-1",
+    "name": "Dr. Alice Smith",
+    "specialty": "Cardiology",
+    "symptoms": ["chest pain", "shortness of breath", "palpitations"],
+    "location": "New York",
+    "contact": "alice.smith@hospital.org"
+  },
+  {
+    "id": "doc-2",
+    "name": "Dr. Bob Lee",
+    "specialty": "Dermatology",
+    "symptoms": ["rash", "itching", "skin lesion"],
+    "location": "San Francisco",
+    "contact": "bob.lee@clinic.com"
+  },
+  {
+    "id": "doc-3",
+    "name": "Dr. Carol Patel",
+    "specialty": "Neurology",
+    "symptoms": ["headache", "dizziness", "seizure"],
+    "location": "Chicago",
+    "contact": "carol.patel@neurocenter.com"
+  },
+  {
+    "id": "doc-4",
+    "name": "Dr. David Kim",
+    "specialty": "Gastroenterology",
+    "symptoms": ["abdominal pain", "nausea", "diarrhea"],
+    "location": "Los Angeles",
+    "contact": "david.kim@gihealth.com"
+  }
+]
