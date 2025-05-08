@@ -2,6 +2,59 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## IMPORTANT GUIDELINES
+
+When working with this codebase:
+
+1. **Always research before implementing**: Before making any changes, thoroughly research the official documentation for the technologies being used (e.g., Mastra, TypeScript, etc.). Do not implement solutions based solely on error messages or assumptions.
+
+2. **Verify implementations**: Test your changes against the documentation to ensure correctness. Don't assume implementation details based on partial information.
+
+3. **Respect existing patterns**: Follow the established code patterns in the repository, especially for key framework features like memory, storage, and agent configuration.
+
+4. **Check for TypeScript errors after each change**: Run TypeScript checks after each modification to ensure no new errors are introduced. Never commit or consider a task complete without verifying the code is TypeScript-error-free.
+
+5. **Incremental changes**: Make changes incrementally and validate after each step rather than making multiple large changes at once.
+
+## Using the "Think" Tool
+
+When working on complex tasks or problems, use the "think" tool to break down your reasoning process. This provides a structured space to work through problems methodically before implementing solutions. Use the following format:
+
+```
+<think_step_1>
+- Define the problem or task requirements
+- List the key components or variables involved
+- Identify any constraints or edge cases
+</think_step_1>
+
+<think_step_2>
+- Explore possible approaches or solutions
+- Evaluate each approach against the requirements
+- Consider the pros and cons of each approach
+</think_step_2>
+
+<think_step_3>
+- Select the best approach based on requirements and constraints
+- Break down the implementation into specific steps
+- Identify any potential issues or challenges
+</think_step_3>
+
+<think_step_4>
+- Plan the specific implementation details
+- Consider how the implementation integrates with existing code
+- Verify the approach against TypeScript type safety
+</think_step_4>
+```
+
+This step-by-step thinking approach should be used especially for:
+- Complex feature implementations
+- Bug fixes requiring deep analysis
+- Architectural decisions
+- Performance optimizations
+- API integrations
+
+Use as many or as few steps as needed, but maintain the structured format to ensure thorough and methodical problem-solving.
+
 ## Project Overview
 
 DocSeek is an AI-powered medical agent application built with the Mastra framework. The application provides:
