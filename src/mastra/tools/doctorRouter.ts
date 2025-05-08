@@ -1,11 +1,19 @@
 import { createTool } from "@mastra/core/tools";
 import { FindDoctorToolInputSchema } from "../schemas";
-import { doctorService } from "../index";
+import { matchDoctorsForDiagnosis } from "../services/doctorService";
+
+// Get reference to the Mastra instance to avoid circular imports
+let mastraInstance: any;
+
+// Function to set the Mastra instance from the index file
+export function setMastraInstance(instance: any) {
+  mastraInstance = instance;
+}
 
 /**
  * @file doctorRouter.ts
  * Tool to find appropriate doctors based on a medical diagnosis and symptoms.
- * It uses the doctorService to find appropriate doctors based on diagnosis.
+ * It uses direct function calls to avoid circular dependencies.
  */
 export const findDoctorsTool = createTool({
   id: "findDoctorsForDiagnosis",
@@ -27,7 +35,33 @@ export const findDoctorsTool = createTool({
       severity,
     });
 
-    // Use the doctor service to find appropriate doctors
-    return await doctorService.findDoctors(diagnosis, symptoms, severity);
+    if (!mastraInstance) {
+      return "Error: Doctor matching service not initialized. Please try again later.";
+    }
+
+    // Function to send a message to the doctor matching agent and get a response
+    const agentMessageHandler = async (message: string): Promise<string> => {
+      try {
+        // Create a thread for communication with the doctorMatchingAgent
+        const thread = await mastraInstance.agents.doctorMatchingAgent.createThread();
+        
+        // Send the message to the agent
+        const response = await thread.sendUserMessage(message);
+        
+        // Return the response content
+        return response.content;
+      } catch (error: any) {
+        console.error("Error communicating with doctor matching agent:", error);
+        throw new Error(`Failed to communicate with doctor matching agent: ${error?.message}`);
+      }
+    };
+
+    // Use the doctor matching function to find appropriate doctors
+    return await matchDoctorsForDiagnosis(
+      diagnosis, 
+      symptoms, 
+      severity, 
+      agentMessageHandler
+    );
   },
 });
