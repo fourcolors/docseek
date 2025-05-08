@@ -1,6 +1,8 @@
 import { openai } from "@ai-sdk/openai"; // Correct import path
 import { Agent } from "@mastra/core/agent";
 import { findDoctorsTool } from "../tools/doctorRouter"; // Adjusted path
+import { Memory } from "@mastra/memory";
+import { storage } from "../storage";
 
 /**
  * @file medicalAgent.ts
@@ -14,9 +16,21 @@ import { findDoctorsTool } from "../tools/doctorRouter"; // Adjusted path
  * The diagnostic agent for medical consultations.
  * Handles patient conversations, preliminary diagnosis, and doctor recommendations.
  */
+// Create simple memory instance with latest recommended pattern
+const memory = new Memory({
+  storage,
+  options: {
+    lastMessages: 50,
+    threads: {
+      generateTitle: true
+    }
+  }
+});
+
 export const diagnosticAgent = new Agent({
   name: "medical-diagnostic-assistant",
   model: openai(process.env.MODEL || "gpt-4o"), // Use environment variable or default
+  memory,
   instructions: `You are a medical diagnostic assistant for DocSeek medical app in Singapore.
 
 Your job is to:

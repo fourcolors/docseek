@@ -1,8 +1,19 @@
 import { Agent } from "@mastra/core/agent";
 import { openai } from "@ai-sdk/openai"; // Correct import path
 import { Memory } from "@mastra/memory";
+import { storage } from "../storage";
 
-const memory = new Memory();
+// Create simple memory instance with latest recommended pattern
+const memory = new Memory({
+  storage,
+  options: {
+    lastMessages: 50,
+    threads: {
+      generateTitle: true,
+    },
+  },
+});
+
 export const doctorMatchingAgent = new Agent({
   name: "doctor-matcher",
   model: openai(process.env.MODEL || "gpt-4o"),

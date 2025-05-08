@@ -1,24 +1,11 @@
 import { createTool } from "@mastra/core/tools";
 import { FindDoctorToolInputSchema } from "../schemas";
-
-export type DoctorTypesMap = {
-  [specialty: string]: string[];
-};
-
-// In-memory doctor data as per user's example
-const doctorTypes: DoctorTypesMap = {
-  cardiology: ["Dr. Lee (Heart Specialist)", "Dr. Wong (Cardiovascular)"],
-  dermatology: ["Dr. Tan (Skin Specialist)", "Dr. Chen (Dermatology)"],
-  neurology: ["Dr. Lim (Neurologist)", "Dr. Singh (Brain Specialist)"],
-  orthopedics: ["Dr. Kumar (Bone Specialist)", "Dr. Patel (Joint Care)"],
-  general: ["Dr. Ng (General Practitioner)", "Dr. Sharma (Family Medicine)"],
-};
+import { doctorService } from "../index";
 
 /**
  * @file doctorRouter.ts
  * Tool to find appropriate doctors based on a medical diagnosis and symptoms.
- * It uses an in-memory doctor list (doctorTypes) and the doctorMatchingAgent
- * to get recommendations.
+ * It uses the doctorService to find appropriate doctors based on diagnosis.
  */
 export const findDoctorsTool = createTool({
   id: "findDoctorsForDiagnosis",
@@ -39,7 +26,8 @@ export const findDoctorsTool = createTool({
       symptoms,
       severity,
     });
-    // TODO: Implement doctor finding logic
-    return "No doctors found";
+
+    // Use the doctor service to find appropriate doctors
+    return await doctorService.findDoctors(diagnosis, symptoms, severity);
   },
 });
