@@ -1,5 +1,5 @@
 import { doctorMatchingAgent } from "./doctorMatchingAgent";
-import { diagnosticAgent } from "./medicalAgent";
+import { diagnosticAgent } from "./diagnosticAgent";
 
 export const agents = {
   doctorMatchingAgent,
